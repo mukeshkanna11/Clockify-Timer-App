@@ -17,14 +17,24 @@ const TaskItem = ({ task, onDelete, onComplete, onTimeUpdate }) => {
     };
 
     return (
-        <li className="flex flex-col md:flex-row items-center justify-between border p-4 mb-2 rounded">
-            <span className="mb-2 md:mb-0">{task.title}</span>
-            <div className="flex flex-col md:flex-row items-center">
+        <li className="flex flex-col items-center justify-between p-4 mb-4 bg-white border rounded-lg shadow-md md:flex-row">
+            <span className="mb-2 font-medium text-gray-700 font-poppins md:mb-0">{task.title}</span>
+            <div className="flex flex-col items-center space-y-2 md:flex-row md:space-y-0 md:space-x-4">
                 <Timer task={task} onTimeUpdate={onTimeUpdate} isActive={isActive} />
-                <button className="bg-green-500 text-white py-1 px-3 ml-0 md:ml-4 mt-2 md:mt-0 rounded" onClick={handleStartStop}>
+                <button 
+                    className={`py-1 px-4 rounded-full font-poppins transition-colors duration-200 ${
+                        isActive ? 'bg-yellow-500 hover:bg-yellow-600 text-white' : 'bg-blue-500 hover:bg-blue-600 text-white'
+                    }`}
+                    onClick={handleStartStop}
+                >
                     {isActive ? 'Stop' : 'Start'}
                 </button>
-                <button className="bg-red-500 text-white py-1 px-3 ml-0 md:ml-4 mt-2 md:mt-0 rounded" onClick={() => onDelete(task.id)}>Delete</button>
+                <button 
+                    className="px-4 py-1 text-white transition-colors duration-200 bg-red-500 rounded-full font-poppins hover:bg-red-600"
+                    onClick={() => onDelete(task.id)}
+                >
+                    Delete
+                </button>
             </div>
         </li>
     );

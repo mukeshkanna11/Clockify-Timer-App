@@ -50,24 +50,24 @@ const TaskList = () => {
     };
 
     return (
-        <div className="container mx-auto p-4 bg-gray-200 min-h-screen">
-            <h1 className="text-3xl font-bold mb-6 text-center text-indigo-600">Timer App</h1>
-            <div className="mb-6 flex flex-col md:flex-row items-center justify-center">
+        <div className="container min-h-screen p-6 mx-auto bg-gray-100">
+            <h1 className="mb-8 text-4xl font-bold text-center text-blue-600 font-poppins">Task Timer App</h1>
+            <div className="flex flex-col items-center justify-center mb-6 md:flex-row">
                 <input 
                     type="text" 
-                    className="border border-gray-300 rounded-lg p-3 w-full md:w-auto focus:outline-none focus:border-indigo-500 shadow-md" 
+                    className="w-full p-3 text-gray-700 border border-gray-300 rounded-lg shadow-md font-poppins md:w-auto focus:outline-none focus:border-blue-500" 
                     placeholder="Enter a new task..." 
                     value={newTask} 
                     onChange={(e) => setNewTask(e.target.value)} 
                 />
                 <button 
-                    className="bg-indigo-600 text-white py-3 px-6 rounded-lg shadow-md mt-4 md:mt-0 md:ml-4 hover:bg-indigo-700 transition duration-300 w-full md:w-auto"
+                    className="w-full px-6 py-3 mt-4 text-white transition duration-300 bg-blue-600 rounded-lg shadow-md font-poppins md:mt-0 md:ml-4 hover:bg-blue-700 md:w-auto"
                     onClick={addTask}
                 >
                     Add Task
                 </button>
             </div>
-            <h2 className="text-2xl font-semibold mb-4 text-gray-700">Active Tasks</h2>
+            <h2 className="mb-4 text-2xl font-semibold text-gray-700 font-poppins">Active Tasks</h2>
             <ul>
                 {tasks.map(task => (
                     <TaskItem 
@@ -82,13 +82,13 @@ const TaskList = () => {
 
             {completedTasks.length > 0 && (
                 <>
-                    <h2 className="text-2xl font-semibold mt-8 mb-4 text-gray-700">Completed Tasks</h2>
+                    <h2 className="mt-8 mb-4 text-2xl font-semibold text-gray-700 font-poppins">Completed Tasks</h2>
                     <ul>
                         {completedTasks.map(task => (
-                            <li key={task.id} className="flex flex-col md:flex-row justify-between items-center border p-4 mb-4 rounded-lg bg-green-100 shadow-md">
-                                <span className="text-center md:text-left text-gray-800">{task.title} - Completed on {task.dateCompleted}, took {formatTime(task.totalTimeSpent)}</span>
+                            <li key={task.id} className="flex flex-col items-center justify-between p-4 mb-4 border rounded-lg shadow-md font-poppins md:flex-row bg-gray-50">
+                                <span className="text-center text-gray-800 font-poppins md:text-left">{task.title} - Completed on {task.dateCompleted}, took {formatTime(task.totalTimeSpent)}</span>
                                 <button 
-                                    className="bg-red-500 text-white py-2 px-4 rounded-lg shadow-md mt-4 md:mt-0 hover:bg-red-600 transition duration-300"
+                                    className="px-4 py-2 mt-4 text-white transition duration-300 bg-red-500 rounded-lg shadow-md font-poppins md:mt-0 hover:bg-red-600"
                                     onClick={() => deleteCompletedTask(task.id)}
                                 >
                                     Delete
