@@ -86,7 +86,9 @@ const TaskList = () => {
                     <ul>
                         {completedTasks.map(task => (
                             <li key={task.id} className="flex flex-col items-center justify-between p-4 mb-4 border rounded-lg shadow-md font-poppins md:flex-row bg-gray-50">
-                                <span className="text-center text-gray-800 font-poppins md:text-left">{task.title} - Completed on {task.dateCompleted}, took {formatTime(task.totalTimeSpent)}</span>
+                                <span className="text-center text-gray-800 font-poppins md:text-left">
+                                    {task.title} - Completed on {task.dateCompleted}, took {formatTime(task.totalTimeSpent)}
+                                </span>
                                 <button 
                                     className="px-4 py-2 mt-4 text-white transition duration-300 bg-red-500 rounded-lg shadow-md font-poppins md:mt-0 hover:bg-red-600"
                                     onClick={() => deleteCompletedTask(task.id)}

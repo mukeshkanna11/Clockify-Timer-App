@@ -20,7 +20,6 @@ const TaskItem = ({ task, onDelete, onComplete, onTimeUpdate }) => {
         <li className="flex flex-col items-center justify-between p-4 mb-4 bg-white border rounded-lg shadow-md md:flex-row">
             <span className="mb-2 font-medium text-gray-700 font-poppins md:mb-0">{task.title}</span>
             <div className="flex flex-col items-center space-y-2 md:flex-row md:space-y-0 md:space-x-4">
-                <Timer task={task} onTimeUpdate={onTimeUpdate} isActive={isActive} />
                 <button 
                     className={`py-1 px-4 rounded-full font-poppins transition-colors duration-200 ${
                         isActive ? 'bg-yellow-500 hover:bg-yellow-600 text-white' : 'bg-blue-500 hover:bg-blue-600 text-white'
@@ -35,6 +34,7 @@ const TaskItem = ({ task, onDelete, onComplete, onTimeUpdate }) => {
                 >
                     Delete
                 </button>
+                <Timer task={task} onTimeUpdate={onTimeUpdate} isActive={isActive} />
             </div>
         </li>
     );
