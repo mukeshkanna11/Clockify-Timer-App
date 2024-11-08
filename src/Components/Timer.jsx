@@ -1,36 +1,27 @@
-import React, { useState, useEffect } from 'react';
+// Timer.js
+import React, { useEffect, useState } from 'react';
 
-const Timer = ({ task, onTimeUpdate, isActive }) => {
-    const [time, setTime] = useState(task.timeSpent); // Time is in seconds
+const Timer = ({ task, onTimeUpdate, isActive, onComplete }) => {
+    const [time, setTime] = useState(task.timeSpent || 0);
 
     useEffect(() => {
-        let interval = null;
+        let interval;
         if (isActive) {
             interval = setInterval(() => {
                 setTime(prevTime => {
                     const updatedTime = prevTime + 1;
-                    onTimeUpdate(task.id, updatedTime); // Update time in the parent component
+                    onTimeUpdate(task.id, updatedTime);
                     return updatedTime;
                 });
             }, 1000);
-        } else {
+        } else if (!isActive && time > 0) {
             clearInterval(interval);
+            onComplete(task.id, time);
         }
         return () => clearInterval(interval);
-    }, [isActive, task.id, onTimeUpdate]);
+    }, [isActive, time]);
 
-    const formatTime = (seconds) => {
-        const hrs = Math.floor(seconds / 3600);
-        const mins = Math.floor((seconds % 3600) / 60);
-        const secs = seconds % 60;
-        return `${hrs.toString().padStart(2, '0')} hrs : ${mins.toString().padStart(2, '0')} mins : ${secs.toString().padStart(2, '0')} secs`;
-    };
-
-    return (
-        <div className="flex items-center">
-            <span>{formatTime(time)}</span>
-        </div>
-    );
+    return <span>{new Date(time * 1000).toISOString().substr(11, 8)}</span>;
 };
 
 export default Timer;

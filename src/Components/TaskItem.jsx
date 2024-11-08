@@ -1,3 +1,4 @@
+// TaskItem.js
 import React, { useState } from 'react';
 import Timer from './Timer';
 
@@ -11,9 +12,6 @@ const TaskItem = ({ task, onDelete, onComplete, onTimeUpdate }) => {
 
     const handleStartStop = () => {
         setIsActive(!isActive);
-        if (isActive) {
-            onComplete(task.id, task.timeSpent);
-        }
     };
 
     return (
@@ -34,7 +32,7 @@ const TaskItem = ({ task, onDelete, onComplete, onTimeUpdate }) => {
                 >
                     Delete
                 </button>
-                <Timer task={task} onTimeUpdate={onTimeUpdate} isActive={isActive} />
+                <Timer task={task} onTimeUpdate={onTimeUpdate} isActive={isActive} onComplete={handleComplete} />
             </div>
         </li>
     );

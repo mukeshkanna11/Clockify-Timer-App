@@ -39,7 +39,7 @@ const Sidebar = () => (
         </div>
 
         <div className="mt-6 text-sm text-gray-400">
-            <p>© 2024 YourApp</p>
+            <p>© 2024 TimerApp</p>
         </div>
     </div>
 );

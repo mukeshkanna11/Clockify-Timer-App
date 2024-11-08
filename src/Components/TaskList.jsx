@@ -51,7 +51,7 @@ const TaskList = () => {
 
     return (
         <div className="container min-h-screen p-6 mx-auto bg-gray-100">
-            <h1 className="mb-8 text-4xl font-bold text-center text-blue-600 font-poppins">Task Timer App</h1>
+            <h1 className="mb-8 text-4xl font-bold text-center text-blue-600 font-poppins">Task Timer</h1>
             <div className="flex flex-col items-center justify-center mb-6 md:flex-row">
                 <input 
                     type="text" 
@@ -70,7 +70,7 @@ const TaskList = () => {
             <h2 className="mb-4 text-2xl font-semibold text-gray-700 font-poppins">Active Tasks</h2>
             <ul>
                 {tasks.map(task => (
-                    <TaskItem 
+                    <TaskItem  
                         key={task.id} 
                         task={task} 
                         onDelete={deleteTask} 
@@ -87,7 +87,7 @@ const TaskList = () => {
                         {completedTasks.map(task => (
                             <li key={task.id} className="flex flex-col items-center justify-between p-4 mb-4 border rounded-lg shadow-md font-poppins md:flex-row bg-gray-50">
                                 <span className="text-center text-gray-800 font-poppins md:text-left">
-                                    {task.title} - Completed on {task.dateCompleted}, took {formatTime(task.totalTimeSpent)}
+                                    <strong>{task.title}</strong> - Completed on <span className="font-semibold">{task.dateCompleted}</span>, took <span className="font-semibold">{formatTime(task.totalTimeSpent)}</span>
                                 </span>
                                 <button 
                                     className="px-4 py-2 mt-4 text-white transition duration-300 bg-red-500 rounded-lg shadow-md font-poppins md:mt-0 hover:bg-red-600"
