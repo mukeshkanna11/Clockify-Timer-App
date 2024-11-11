@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import TaskItem from './TaskItem';
+import { useNavigate } from 'react-router-dom';
 
-const TaskList = () => {
+const TaskList = ({ onCompleteTask }) => {
     const [tasks, setTasks] = useState([]);
     const [completedTasks, setCompletedTasks] = useState([]);
     const [newTask, setNewTask] = useState('');
+    const navigate = useNavigate();
 
     const addTask = () => {
         if (newTask.trim() !== '') {
@@ -25,7 +27,12 @@ const TaskList = () => {
         const taskToComplete = tasks.find(task => task.id === id);
         if (taskToComplete) {
             const dateCompleted = new Date().toLocaleDateString();
-            setCompletedTasks([...completedTasks, { ...taskToComplete, dateCompleted, totalTimeSpent, isActive: false }]);
+            const completedTask = { ...taskToComplete, dateCompleted, totalTimeSpent };
+            setCompletedTasks([...completedTasks, completedTask]);
+
+            // Pass the completed task to the parent component (App.js)
+            onCompleteTask(completedTask);
+
             deleteTask(id);
         }
     };

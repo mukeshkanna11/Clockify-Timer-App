@@ -1,110 +1,80 @@
-import React, { useState } from 'react';
-import { Chart } from 'react-chartjs-2';
+import React from 'react';
+import { Bar } from 'react-chartjs-2';
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
+
+// Register the components to use them in the chart
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 const Report = ({ completedTasks }) => {
-    const [dateRange, setDateRange] = useState({ start: '', end: '' });
+    // Format the time into total seconds for the chart
+    const taskTitles = completedTasks.map(task => task.title);
+    const taskTimes = completedTasks.map(task => task.totalTimeSpent);
 
-    // Filter tasks based on the selected date range
-    const filteredTasks = completedTasks.filter(task => {
-        if (!dateRange.start || !dateRange.end) return true; // Show all if no date range set
-        const taskDate = new Date(task.dateCompleted);
-        const startDate = new Date(dateRange.start);
-        const endDate = new Date(dateRange.end);
-        return taskDate >= startDate && taskDate <= endDate;
-    });
-
-    const totalHours = filteredTasks.reduce((total, task) => total + task.totalTimeSpent / 3600, 0);
-
-    // Data for Chart.js
-    const data = {
-        labels: filteredTasks.map(task => task.dateCompleted),
+    const chartData = {
+        labels: taskTitles,
         datasets: [
             {
-                label: 'Time Spent (hours)',
-                data: filteredTasks.map(task => task.totalTimeSpent / 3600),
+                label: 'Time Spent (seconds)',
+                data: taskTimes,
                 backgroundColor: 'rgba(75, 192, 192, 0.6)',
                 borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 1,
-            },
-        ],
+                borderWidth: 1
+            }
+        ]
     };
 
-    // Handle date range changes
-    const handleDateChange = (e) => {
-        const { name, value } = e.target;
-        setDateRange(prev => ({
-            ...prev,
-            [name]: value,
-        }));
+    const chartOptions = {
+        responsive: true,
+        plugins: {
+            title: {
+                display: true,
+                text: 'Time Spent on Completed Tasks'
+            },
+            legend: {
+                position: 'top',
+            }
+        }
+    };
+
+    // Format the time into a readable string (e.g., "2 hours, 30 minutes")
+    const formatTime = (totalSeconds) => {
+        const hours = Math.floor(totalSeconds / 3600);
+        const minutes = Math.floor((totalSeconds % 3600) / 60);
+        const seconds = totalSeconds % 60;
+
+        const hoursStr = hours > 0 ? `${hours} hour${hours !== 1 ? 's' : ''}` : '';
+        const minutesStr = minutes > 0 ? `${minutes} minute${minutes !== 1 ? 's' : ''}` : '';
+        const secondsStr = seconds > 0 ? `${seconds} second${seconds !== 1 ? 's' : ''}` : '';
+
+        return [hoursStr, minutesStr, secondsStr].filter(Boolean).join(', ') || '0 seconds';
     };
 
     return (
-        <div className="p-6 bg-white rounded-lg shadow-md">
-            {/* Report Header */}
-            <div className="flex items-center justify-between pb-4 border-b border-gray-200">
-                <h2 className="text-2xl font-semibold text-gray-700">Completed Tasks Report</h2>
-                <span className="text-xl font-bold text-blue-600">Total: {totalHours.toFixed(2)} hours</span>
-            </div>
+        <div className="container min-h-screen p-6 mx-auto bg-gray-100">
+            <h1 className="mb-8 text-4xl font-bold text-center text-blue-600 font-poppins">Task Report</h1>
 
-            {/* Date Range Filter */}
-            <div className="flex my-4 space-x-4">
-                <label className="flex flex-col">
-                    Start Date
-                    <input
-                        type="date"
-                        name="start"
-                        value={dateRange.start}
-                        onChange={handleDateChange}
-                        className="p-2 border border-gray-300 rounded"
-                    />
-                </label>
-                <label className="flex flex-col">
-                    End Date
-                    <input
-                        type="date"
-                        name="end"
-                        value={dateRange.end}
-                        onChange={handleDateChange}
-                        className="p-2 border border-gray-300 rounded"
-                    />
-                </label>
-            </div>
+            {completedTasks.length === 0 ? (
+                <p className="text-center text-gray-700">No completed tasks yet!</p>
+            ) : (
+                <>
+                    <div className="mb-8">
+                        <Bar data={chartData} options={chartOptions} />
+                    </div>
 
-            {/* Chart Section */}
-            <div className="my-4">
-                {filteredTasks.length > 0 ? (
-                    <Chart type="bar" data={data} options={{ responsive: true }} />
-                ) : (
-                    <p>No data available for the selected date range.</p>
-                )}
-            </div>
-
-            {/* Task Details */}
-            <h3 className="mt-8 text-xl font-semibold">Task Details</h3>
-            <ul className="mt-4 space-y-4">
-                {filteredTasks.length > 0 ? (
-                    filteredTasks.map(task => (
-                        <li key={task.id} className="p-4 border rounded-lg shadow-sm bg-gray-50">
-                            <h4 className="text-lg font-bold text-gray-800">{task.title}</h4>
-                            <p className="text-gray-600">Completed on: {task.dateCompleted}</p>
-                            <p className="text-gray-600">Time spent: {formatTime(task.totalTimeSpent)}</p>
-                        </li>
-                    ))
-                ) : (
-                    <p>No completed tasks to display.</p>
-                )}
-            </ul>
+                    <h2 className="mb-4 text-2xl font-semibold text-gray-700 font-poppins">Completed Tasks</h2>
+                    <ul>
+                        {completedTasks.map((task) => (
+                            <li key={task.id} className="flex flex-col items-center justify-between p-4 mb-4 border rounded-lg shadow-md font-poppins md:flex-row bg-gray-50">
+                                <span className="text-center text-gray-800 font-poppins md:text-left">
+                                    <strong>{task.title}</strong> - Completed on <span className="font-semibold">{task.dateCompleted}</span>, took <span className="font-semibold">{formatTime(task.totalTimeSpent)}</span>
+                                </span>
+                            </li>
+                        ))}
+                    </ul>
+                </>
+            )}
         </div>
     );
-};
-
-// Function to format time
-const formatTime = (totalSeconds) => {
-    const hours = Math.floor(totalSeconds / 3600);
-    const minutes = Math.floor((totalSeconds % 3600) / 60);
-    const seconds = totalSeconds % 60;
-
-    return `${hours > 0 ? `${hours}h ` : ''}${minutes > 0 ? `${minutes}m ` : ''}${seconds > 0 ? `${seconds}s` : ''}`.trim() || '0 seconds';
 };
 
 export default Report;
